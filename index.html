@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>💖 A Special Proposal For You 💖</title>
+  <!-- Bootstrap 5 + Icons + Google Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- canvas-confetti library for amazing celebration effect -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(145deg, #ff9a9e 0%, #fad0c4 50%, #fad0c4 100%);
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating hearts animation background */
+    .floating-heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 1.5rem;
+      pointer-events: none;
+      z-index: 5;
+      animation: floatUp 5s linear forwards;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Main Card Style */
+    .proposal-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(2px);
+      border-radius: 48px;
+      border: none;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+      width: 100%;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .proposal-card:hover {
+      transform: scale(1.01);
+      box-shadow: 0 40px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-inner {
+      padding: 2rem 1.8rem;
+      text-align: center;
+    }
+
+    .heart-icon {
+      font-size: 4.5rem;
+      color: #ff3366;
+      animation: heartbeat 1.4s infinite ease-in-out;
+      display: inline-block;
+      filter: drop-shadow(0 4px 8px rgba(255,51,102,0.3));
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); text-shadow: 0 0 5px #ff3366; }
+    }
+
+    .title-glow {
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff3366, #ff8c42);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin: 0.75rem 0;
+      font-size: 2.2rem;
+      letter-spacing: -0.5px;
+    }
+
+    .message-text {
+      font-size: 1.2rem;
+      color: #4a2e2e;
+      font-weight: 500;
+      margin: 1rem 0;
+      background: #fff0f0;
+      padding: 0.8rem;
+      border-radius: 40px;
+      display: inline-block;
+      width: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .romantic-quote {
+      font-size: 1rem;
+      color: #b95c5c;
+      font-style: italic;
+      margin: 1rem 0;
+      border-left: 3px solid #ff99aa;
+      padding-left: 1rem;
+      text-align: left;
+      background: #fff9f9;
+      border-radius: 20px;
+      padding: 12px 15px;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0 1rem;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .btn-propose {
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 12px 32px;
+      border-radius: 60px;
+      border: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+    }
+
+    .btn-yes {
+      background: linear-gradient(100deg, #ff5f7c, #ff3366);
+      color: white;
+      border: none;
+    }
+
+    .btn-yes:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 20px rgba(255,51,102,0.3);
+      background: linear-gradient(100deg, #ff708b, #ff4a78);
+    }
+
+    .btn-no {
+      background: #c0b7b7;
+      color: #2d2d2d;
+      transition: transform 0.2s ease, background 0.2s;
+      position: relative;
+      backdrop-filter: blur(2px);
+    }
+
+    .btn-no:active {
+      transform: scale(0.96);
+    }
+
+    /* moving no button style - smooth movements */
+    .no-move {
+      transition: transform 0.25s cubic-bezier(0.34, 1.2, 0.64, 1) !important;
+    }
+
+    /* Success message area */
+    .response-area {
+      margin-top: 1.5rem;
+      font-weight: 600;
+      transition: all 0.4s ease;
+    }
+
+    .accept-message {
+      background: #fff0f5;
+      border-radius: 40px;
+      padding: 1rem;
+      animation: fadeScale 0.5s ease;
+      border: 1px solid #ffc0cb;
+    }
+
+    @keyframes fadeScale {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .hidden-buttons {
+      display: none;
+    }
+
+    .cute-gif-placeholder {
+      font-size: 3rem;
+      margin: 0.5rem 0;
+    }
+
+    /* toast floating message for no button trick */
+    .floating-notice {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      color: #ffebd0;
+      padding: 10px 20px;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 200;
+      pointer-events: none;
+      animation: fadeOutUp 1.2s forwards;
+      white-space: nowrap;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    @keyframes fadeOutUp {
+      0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-40px);
+        visibility: hidden;
+      }
+    }
+
+    /* Responsiveness */
+    @media (max-width: 576px) {
+      .card-inner {
+        padding: 1.5rem 1rem;
+      }
+      .title-glow {
+        font-size: 1.8rem;
+      }
+      .btn-propose {
+        padding: 10px 24px;
+        font-size: 1rem;
+      }
+      .message-text {
+        font-size: 1rem;
+      }
+      .button-group {
+        gap: 1rem;
+      }
+    }
+    /* ensure no button does not break layout on small devices */
+    .no-wrapper {
+      display: inline-block;
+    }
+    footer {
+      font-size: 0.7rem;
+      margin-top: 1rem;
+      color: #a05a5a;
+    }
+  </style>
+</head>
+<body>
+
+<!-- floating hearts will be injected via JS -->
+<div class="container d-flex align-items-center justify-content-center min-vh-100 py-4">
+  <div class="proposal-card">
+    <div class="card-inner">
+      <!-- Animated heart icon -->
+      <div class="heart-icon">
+        <i class="bi bi-heart-fill"></i>
+      </div>
+      
+      <h1 class="title-glow">Hey Beautiful ❤️</h1>
+      
+      <div class="message-text">
+        <i class="bi bi-stars"></i> A little something for you... <i class="bi bi-stars"></i>
+      </div>
+      
+      <div class="romantic-quote">
+        <i class="bi bi-chat-heart-fill text-danger me-2"></i> 
+        "Every love story is beautiful, but ours will be my favorite. <br> 
+        You make my world brighter just by being in it."
+      </div>
+      
+      <!-- The big proposal question -->
+      <h3 class="mt-3 fw-bold" style="color:#d14b6d;">✨ Will you be my Valentine? ✨</h3>
+      <p class="text-secondary" style="font-size: 0.9rem;">(and maybe more... forever?)</p>
+      
+      <!-- Button group with Yes and moving No -->
+      <div class="button-group" id="buttonGroup">
+        <button class="btn-propose btn-yes" id="yesButton">
+          <i class="bi bi-emoji-heart-eyes"></i> Yes, Absolutely!
+        </button>
+        <button class="btn-propose btn-no" id="noButton">
+          <i class="bi bi-x-lg"></i> No, thanks
+        </button>
+      </div>
+      
+      <!-- Response message area (hidden initially) -->
+      <div class="response-area" id="responseArea"></div>
+      <footer class="text-center mt-3">
+        <i class="bi bi-suit-heart-fill text-danger"></i> Made with all my heart
+      </footer>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- ROMANTIC PROPOSAL MAGIC ----------
+  // DOM elements
+  const yesBtn = document.getElementById('yesButton');
+  const noBtn = document.getElementById('noButton');
+  const responseArea = document.getElementById('responseArea');
+  const buttonGroup = document.getElementById('buttonGroup');
+  
+  // state to check if proposal already accepted
+  let proposalAccepted = false;
+  
+  // Function to show nice floating message (toast)
+  function showFloatingMessage(message, emoji = "💖") {
+    const toastDiv = document.createElement('div');
+    toastDiv.className = 'floating-notice';
+    toastDiv.innerHTML = `${emoji} ${message} ${emoji}`;
+    document.body.appendChild(toastDiv);
+    setTimeout(() => {
+      if(toastDiv && toastDiv.remove) toastDiv.remove();
+    }, 1300);
+  }
+  
+  // ========== FLOATING HEARTS BACKGROUND (continuously) ==========
+  function createFloatingHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('floating-heart');
+    heart.innerHTML = ['❤️', '💖', '💗', '💓', '🌸', '💕', '💘', '🌹'][Math.floor(Math.random() * 8)];
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.fontSize = Math.random() * 24 + 16 + 'px';
+    heart.style.animationDuration = Math.random() * 3 + 3.5 + 's';
+    heart.style.opacity = Math.random() * 0.6 + 0.3;
+    document.body.appendChild(heart);
+    setTimeout(() => {
+      heart.remove();
+    }, 6000);
+  }
+  
+  // Generate hearts continuously (romantic atmosphere)
+  let heartInterval = setInterval(() => {
+    if (!proposalAccepted) {
+      createFloatingHeart();
+    } else {
+      // after acceptance even more hearts!
+      createFloatingHeart();
+      if(Math.random() > 0.6) createFloatingHeart(); // double fun
+    }
+  }, 500);
+  
+  // ========== CONFETTI CELEBRATION (multi-burst) ==========
+  function celebrateWithConfetti() {
+    // shoot confetti in multiple directions
+    canvasConfetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, startVelocity: 20, colors: ['#ff3366', '#ff8c42', '#ffc0cb', '#ffb3ba'] });
+    canvasConfetti({ particleCount: 100, spread: 120, origin: { y: 0.5, x: 0.3 }, startVelocity: 25 });
+    canvasConfetti({ particleCount: 100, spread: 120, origin: { y: 0.5, x: 0.7 }, startVelocity: 25 });
+    setTimeout(() => {
+      canvasConfetti({ particleCount: 300, spread: 100, origin: { y: 0.4 }, startVelocity: 18, decay: 0.9 });
+    }, 200);
+    setTimeout(() => {
+      canvasConfetti({ particleCount: 500, spread: 130, origin: { y: 0.5, x: 0.5 }, startVelocity: 22 });
+    }, 500);
+  }
+  
+  // ========== PROPOSAL ACCEPTED ==========
+  function acceptProposal() {
+    if (proposalAccepted) return;
+    proposalAccepted = true;
+    
+    // celebration effects
+    celebrateWithConfetti();
+    
+    // stunning romantic message
+    responseArea.innerHTML = `
+      <div class="accept-message">
+        <div class="cute-gif-placeholder">
+          <i class="bi bi-balloon-heart-fill fs-1"></i> 
+          <i class="bi bi-emoji-sunglasses fs-1"></i>
+          <i class="bi bi-gem fs-1"></i>
+        </div>
+        <h3 class="text-danger fw-bold mt-2">💞 YES! You made me the happiest person! 💞</h3>
+        <p class="fs-5 mt-3">🎉 Our beautiful journey starts now! I promise to cherish every moment with you. 🎉</p>
+        <p class="fw-light text-dark">✨ I love you more than all the stars in the sky ✨</p>
+        <div class="mt-3">
+          <i class="bi bi-envelope-heart fs-3 text-danger"></i>
+          <p class="small mt-2">You've officially stolen my heart forever 💘</p>
+        </div>
+      </div>
+    `;
+    
+    // disable and hide original buttons but with smooth transition
+    if (buttonGroup) {
+      // fade out buttons group
+      buttonGroup.style.transition = "opacity 0.4s ease";
+      buttonGroup.style.opacity = "0";
+      setTimeout(() => {
+        buttonGroup.style.display = "none";
+      }, 400);
+    }
+    
+    // extra loving floating hearts flood!
+    for(let i = 0; i < 12; i++) {
+      setTimeout(() => createFloatingHeart(), i * 100);
+    }
+    
+    // Show a sweet toast
+    showFloatingMessage("You said YES! ❤️ I'm over the moon!", "🥰");
+  }
+  
+  // ========== "NO" BUTTON MISCHIEF: Moves away playfully, never says no ==========
+  // This makes the proposal fun and guarantees a yes! girl can't actually decline.
+  let moveAttempts = 0;
+  
+  function moveNoButtonRandomly() {
+    if (proposalAccepted) return; // already accepted, no button disabled later anyway
+    
+    const btn = noBtn;
+    if (!btn) return;
+    
+    // Get parent container dimensions to keep button within card visible area
+    const parent = btn.parentNode;
+    const btnRect = btn.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+    
+    // compute relative to parent bounding but we will use transform within safe margins
+    // relative shift max 50px in X and 30px in Y but ensure button stays clickable and inside card area
+    const maxShiftX = 65;
+    const maxShiftY = 35;
+    // Random shifts
+    let randomX = (Math.random() - 0.5) * maxShiftX * 2;
+    let randomY = (Math.random() - 0.5) * maxShiftY * 2;
+    
+    // Slight constraints - not exceed parent edges visually (just smoother)
+    // apply transform
+    btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    btn.classList.add('no-move');
+    
+    // Playful message: no rejection allowed
+    const cuteMessages = [
+      "🤭 Oops! You can't say no to love! 💕",
+      "💘 Nice try! But click YES instead 🥰",
+      "🌸 I know your heart says YES! 🌸",
+      "✨ You're just playing hard to get 😘",
+      "💖 C'mon... you know I'm the one 💖",
+      "🎀 No button is shy! Choose YES! 🎀",
+      "💗 Even your finger wants YES 💗"
+    ];
+    const msg = cuteMessages[Math.floor(Math.random() * cuteMessages.length)];
+    showFloatingMessage(msg, "😜");
+    
+    // additional effect: slightly shake the no button before moving (optional)
+    btn.style.transition = "transform 0.2s cubic-bezier(0.2, 1.2, 0.8, 1)";
+    moveAttempts++;
+    
+    // If user tries 5 times, we gently change text on No button to "YES is better" but keep moving
+    if (moveAttempts >= 4 && !proposalAccepted) {
+      if (btn.innerHTML.includes("No")) {
+        btn.innerHTML = `<i class="bi bi-emoji-wink"></i> Just say Yes 💕`;
+        btn.style.background = "#ff99aa";
+        btn.style.color = "#4a1e2c";
+        setTimeout(() => {
+          if (!proposalAccepted && btn.innerHTML.includes("Just say Yes")) {
+            btn.innerHTML = `<i class="bi bi-x-lg"></i> No, thanks`;
+            btn.style.background = "#c0b7b7";
+          }
+        }, 3000);
+      }
+    }
+    
+    // auto reset transform after a short while if not accepted? But we wanna keep it moving each click, but it might stay moved,
+    // but it's fun: button will stay at new location for next click, next click moves again.
+    // We do not reset, each click moves relative to current position again (accumulate behavior becomes chaotic but even more fun)
+    // To prevent too far away from container, we could reset after 2 seconds? Actually it's okay because parent overflow is visible.
+    // To avoid button going out of the clickable zone, we keep boundaries reasonable.
+    // But after many moves, reset to original transform after some time? (improves ux) - we do reset after 2.5 seconds if not hover/clicked again.
+    // Let's do a timeout reset (assuming girl may want to click yes eventually)
+    if (window.resetTimeout) clearTimeout(window.resetTimeout);
+    window.resetTimeout = setTimeout(() => {
+      if (!proposalAccepted && btn) {
+        btn.style.transform = `translate(0px, 0px)`;
+        // also revert special text if needed
+        if (btn.innerHTML.includes("Just say Yes")) {
+          btn.innerHTML = `<i class="bi bi-x-lg"></i> No, thanks`;
+          btn.style.background = "#c0b7b7";
+        }
+      }
+    }, 1800);
+  }
+  
+  // Event listener for "No" button: move and show playful denial
+  if (noBtn) {
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (proposalAccepted) return;
+      moveNoButtonRandomly();
+    });
+    
+    // For touch devices (mobile) also prevent accidental tap moving multiple times, but we already handle click
+    noBtn.addEventListener('touchstart', (e) => {
+      if (proposalAccepted) return;
+      e.preventDefault();
+      moveNoButtonRandomly();
+    });
+  }
+  
+  // ========== YES BUTTON EVENT ==========
+  if (yesBtn) {
+    yesBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (proposalAccepted) return;
+      acceptProposal();
+    });
+    // also touch support
+    yesBtn.addEventListener('touchstart', (e) => {
+      if (proposalAccepted) return;
+      e.preventDefault();
+      acceptProposal();
+    });
+  }
+  
+  // bonus: hovering over yes button shows sparkle effect (just for delight)
+  if (yesBtn) {
+    yesBtn.addEventListener('mouseenter', () => {
+      if (!proposalAccepted) {
+        yesBtn.style.transform = 'scale(1.05)';
+      }
+    });
+    yesBtn.addEventListener('mouseleave', () => {
+      yesBtn.style.transform = 'scale(1)';
+    });
+  }
+  
+  // Additional romantic: subtle background heartbeat pulse on card? not needed, but add smooth intro.
+  // Call initial floating hearts (extra)
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => createFloatingHeart(), i * 300);
+  }
+  
+  // if user tries to click no excessively, show fun message after 8 attempts (final cute nudge)
+  let finalNudge = 0;
+  const originalNoClickHandler = noBtn ? noBtn.onclick : null;
+  // override augment: count attempts separately for a big final hint
+  setInterval(() => {
+    if (!proposalAccepted && moveAttempts >= 7 && finalNudge < 1) {
+      finalNudge++;
+      showFloatingMessage("💋 My heart knows you'll say YES! 💋", "💞");
+      // also temporarily change "No" text to "Click YES love 💖"
+      if (noBtn && !proposalAccepted) {
+        const originalHtml = noBtn.innerHTML;
+        noBtn.innerHTML = `<i class="bi bi-emoji-heart-eyes"></i> YES please 💖`;
+        noBtn.style.background = "#ff7795";
+        setTimeout(() => {
+          if (!proposalAccepted && noBtn) {
+            noBtn.innerHTML = originalHtml;
+            noBtn.style.background = "#c0b7b7";
+          }
+        }, 2500);
+      }
+    }
+  }, 1000);
+  
+  // Clean up interval if needed - but it's fine keeps hearts forever
+  // extra: preload confetti feeling
+  console.log("✨ Proposal page ready - impress her heart! 💖");
+  
+  // also make sure that on window resize, no button transform resets to avoid weird clipping? For best experience,
+  // reset any transform on resize so the button doesn't float off screen.
+  window.addEventListener('resize', () => {
+    if (noBtn && !proposalAccepted) {
+      noBtn.style.transform = 'translate(0px, 0px)';
+    }
+  });
+  
+  // micro interactive: if page loaded, welcome message (small toast but subtle)
+  setTimeout(() => {
+    if(!proposalAccepted) {
+      showFloatingMessage("Hey cutie! 💕 Will you accept my heart? Tap YES!", "🌸");
+    }
+  }, 800);
+</script>
+</body>
+</html>
